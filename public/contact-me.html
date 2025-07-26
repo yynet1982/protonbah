@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hubungi Saya - Penasihat Jualan Proton Sabah</title>
+    <meta name="description" content="Berhubung terus dengan saya, penasihat jualan Proton anda yang sah di Sabah. Dapatkan maklumat lanjut, promosi terkini, dan pandu uji model idaman anda.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #D62828; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; --whatsapp-color: #25D366; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .page-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .page-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .back-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .profile-card { background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); text-align: center; padding: 40px 20px; margin-top: 80px; }
+        .profile-image { width: 150px; height: 150px; border-radius: 50%; object-fit: cover; border: 5px solid white; box-shadow: 0 4px 20px rgba(0,0,0,0.2); margin: -115px auto 20px auto; display: block; background-color: #eee; }
+        .profile-name { font-size: 2rem; font-weight: 700; color: var(--primary-color); margin: 0; }
+        .profile-title { font-size: 1.1rem; color: #555; margin: 5px 0 25px 0; }
+        .profile-details { list-style: none; padding: 0; margin: 0 auto; max-width: 400px; }
+        .profile-details li { display: flex; align-items: center; justify-content: flex-start; text-align: left; gap: 15px; margin-bottom: 15px; font-size: 1.1rem; }
+        .profile-details i { color: var(--accent-color); width: 20px; text-align: center; }
+        .social-buttons { display: flex; justify-content: center; gap: 20px; margin-top: 30px; }
+        .social-btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; padding: 12px 25px; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1rem; transition: all 0.3s ease; color: white; }
+        .whatsapp-btn { background-color: var(--whatsapp-color); }
+        .facebook-btn { background-color: #1877F2; }
+        .tiktok-btn { background-color: #000000; }
+        .social-btn:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Profil Penasihat Jualan</h1>
+            <a href="index.html" class="back-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+        </header>
+
+        <div class="profile-card">
+            <img id="profileImage" src="https://placehold.co/150x150/CCCCCC/FFFFFF?text=SA" alt="Gambar Profil" class="profile-image">
+            <h2 id="profileName" class="profile-name">Nama Anda</h2>
+            <p id="profileTitle" class="profile-title">Penasihat Jualan Sah Proton</p>
+            <ul class="profile-details">
+                <li id="profileExperience"><i class="fa-solid fa-star"></i> Pengalaman: 0 Tahun</li>
+                <li id="profileCoverage"><i class="fa-solid fa-map-marker-alt"></i> Kawasan: Seluruh Sabah</li>
+                <li id="profileEducation"><i class="fa-solid fa-graduation-cap"></i> Pendidikan: -</li>
+            </ul>
+            <div class="social-buttons">
+                <a id="whatsappLink" href="#" target="_blank" class="social-btn whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                <a id="facebookLink" href="#" target="_blank" class="social-btn facebook-btn"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                <a id="tiktokLink" href="#" target="_blank" class="social-btn tiktok-btn"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyCn7lrRMUHVRobG2e8wNu_9Cjmannrzia8",
+          authDomain: "alatankewangan.firebaseapp.com",
+          projectId: "alatankewangan",
+          storageBucket: "alatankewangan.appspot.com",
+          messagingSenderId: "354961921413",
+          appId: "1:354961921413:web:418a630e7632f06db660ec",
+          measurementId: "G-2R8WW6W6S7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const profileDocRef = doc(db, 'profile', 'main');
+        onSnapshot(profileDocRef, (doc) => {
+            if (doc.exists()) {
+                const data = doc.data();
+                document.getElementById('profileImage').src = data.image || 'https://placehold.co/150x150/CCCCCC/FFFFFF?text=SA';
+                document.getElementById('profileName').textContent = data.name || 'Nama Anda';
+                document.getElementById('profileTitle').textContent = data.title || 'Penasihat Jualan Sah Proton';
+                document.getElementById('profileExperience').innerHTML = `<i class="fa-solid fa-star"></i> Pengalaman: ${data.experience || 0} Tahun`;
+                document.getElementById('profileCoverage').innerHTML = `<i class="fa-solid fa-map-marker-alt"></i> Kawasan: ${data.coverage || 'Seluruh Sabah'}`;
+                document.getElementById('profileEducation').innerHTML = `<i class="fa-solid fa-graduation-cap"></i> Pendidikan: ${data.education || '-'}`;
+                
+                const phone = data.phone || '601171111239';
+                document.getElementById('whatsappLink').href = `https://wa.me/${phone}?text=Salam,%20saya%20berminat%20untuk%20bertanya%20mengenai%20Proton.`;
+                document.getElementById('facebookLink').href = data.facebookUrl || '#';
+                document.getElementById('tiktokLink').href = data.tiktokUrl || '#';
+            } else {
+                console.log("Tiada data profil dijumpai!");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direktori Penasihat Jualan Kereta & Perumahan Malaysia</title>
+    <meta name="description" content="Cari penasihat jualan (sales advisor) kereta dan ejen hartanah yang dipercayai di seluruh Malaysia. Tapis carian anda mengikut negeri dan kategori.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #3A7CA5; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; --whatsapp-color: #25D366; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        .page-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .page-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .back-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .filter-container { background-color: var(--card-bg); padding: 20px; border-radius: var(--border-radius); margin-bottom: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; align-items: end; }
+        .filter-group label { font-weight: 600; margin-bottom: 8px; display: block; }
+        .filter-group select, .filter-group button { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; }
+        .filter-group button { background-color: var(--accent-color); color: white; border: none; cursor: pointer; }
+        .advisor-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .advisor-card { background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; }
+        .advisor-card-header { display: flex; align-items: center; padding: 20px; gap: 15px; }
+        .advisor-card-header img { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--border-color); }
+        .advisor-info h3 { margin: 0; font-size: 1.25rem; }
+        .advisor-info .category-badge { display: inline-block; background-color: var(--accent-color); color: white; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: 600; margin-top: 5px; }
+        .advisor-card-body { padding: 0 20px 20px 20px; flex-grow: 1; }
+        .advisor-details p { margin: 0 0 10px 0; display: flex; align-items: center; gap: 10px; color: #555; }
+        .advisor-details i { color: var(--primary-color); width: 16px; text-align: center; }
+        .advisor-card-footer { padding: 20px; background-color: var(--secondary-color); margin-top: auto; }
+        .whatsapp-btn { display: block; width: 100%; padding: 12px; text-align: center; background-color: var(--whatsapp-color); color: white; border-radius: 8px; text-decoration: none; font-weight: 600; transition: background-color 0.3s ease; }
+        .whatsapp-btn:hover { background-color: #20b859; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Direktori Penasihat Jualan</h1>
+            <a href="index.html" class="back-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+        </header>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 30px auto; padding: 0 15px;">
+            <p>Sedang mencari <strong>penasihat jualan kereta</strong> atau <strong>ejen hartanah</strong> yang boleh dipercayai? Gunakan direktori kami untuk berhubung dengan pakar jualan profesional di seluruh Malaysia. Tapis carian anda mengikut kategori dan negeri untuk mencari penasihat yang sesuai dengan keperluan anda.</p>
+        </div>
+        <div class="card filter-container">
+            <div class="filter-group">
+                <label for="category-filter">Kategori</label>
+                <select id="category-filter">
+                    <option value="all">Semua Kategori</option>
+                    <option value="kereta">Kereta</option>
+                    <option value="perumahan">Perumahan</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="state-filter">Negeri</label>
+                <select id="state-filter">
+                    <option value="all">Semua Negeri</option>
+                    <option value="Johor">Johor</option><option value="Kedah">Kedah</option><option value="Kelantan">Kelantan</option><option value="Melaka">Melaka</option><option value="Negeri Sembilan">Negeri Sembilan</option><option value="Pahang">Pahang</option><option value="Perak">Perak</option><option value="Perlis">Perlis</option><option value="Pulau Pinang">Pulau Pinang</option><option value="Sabah">Sabah</option><option value="Sarawak">Sarawak</option><option value="Selangor">Selangor</option><option value="Terengganu">Terengganu</option><option value="Kuala Lumpur">W.P. Kuala Lumpur</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button id="reset-btn">Set Semula</button>
+            </div>
+        </div>
+        <div id="advisor-grid" class="advisor-grid">
+            <p>Memuatkan data penasihat jualan...</p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyCn7lrRMUHVRobG2e8wNu_9Cjmannrzia8",
+          authDomain: "alatankewangan.firebaseapp.com",
+          projectId: "alatankewangan",
+          storageBucket: "alatankewangan.appspot.com",
+          messagingSenderId: "354961921413",
+          appId: "1:354961921413:web:418a630e7632f06db660ec",
+          measurementId: "G-2R8WW6W6S7"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        let allAdvisors = [];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const advisorGrid = document.getElementById('advisor-grid');
+            const categoryFilter = document.getElementById('category-filter');
+            const stateFilter = document.getElementById('state-filter');
+            const resetBtn = document.getElementById('reset-btn');
+
+            const advisorsCol = collection(db, 'sales_advisors');
+            onSnapshot(advisorsCol, (snapshot) => {
+                allAdvisors = snapshot.docs.map(doc => doc.data());
+                displayAdvisors(allAdvisors);
+            });
+
+            function displayAdvisors(filteredAdvisors) {
+                advisorGrid.innerHTML = '';
+                if (filteredAdvisors.length === 0) {
+                    advisorGrid.innerHTML = '<p>Tiada penasihat jualan ditemui untuk pilihan ini.</p>';
+                    return;
+                }
+                filteredAdvisors.forEach(sa => {
+                    const card = `
+                        <div class="advisor-card">
+                            <div class="advisor-card-header">
+                                <img src="${sa.image || 'https://placehold.co/100x100/CCCCCC/FFFFFF?text=SA'}" alt="Gambar Profil ${sa.name}" onerror="this.src='https://placehold.co/100x100/CCCCCC/FFFFFF?text=SA'">
+                                <div class="advisor-info">
+                                    <h3>${sa.name}</h3>
+                                    <span class="category-badge">${sa.category.charAt(0).toUpperCase() + sa.category.slice(1)}</span>
+                                </div>
+                            </div>
+                            <div class="advisor-card-body">
+                                <div class="advisor-details">
+                                    <p><i class="fa-solid fa-star"></i> Pengalaman: ${sa.experience} Tahun</p>
+                                    <p><i class="fa-solid fa-map-marker-alt"></i> Kawasan: ${sa.coverage}</p>
+                                    <p><i class="fa-solid fa-location-crosshairs"></i> Negeri: ${sa.state}</p>
+                                </div>
+                            </div>
+                            <div class="advisor-card-footer">
+                                <a href="https://wa.me/${sa.phone}?text=Salam,%20saya%20berminat%20untuk%20bertanya%20mengenai%20perkhidmatan%20anda." target="_blank" class="whatsapp-btn">
+                                    <i class="fa-brands fa-whatsapp"></i> Hubungi di WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                    advisorGrid.innerHTML += card;
+                });
+            }
+
+            function filterAdvisors() {
+                let filtered = allAdvisors;
+                const category = categoryFilter.value;
+                const state = stateFilter.value;
+                if (category !== 'all') { filtered = filtered.filter(sa => sa.category === category); }
+                if (state !== 'all') { filtered = filtered.filter(sa => sa.state === state); }
+                displayAdvisors(filtered);
+            }
+
+            categoryFilter.addEventListener('change', filterAdvisors);
+            stateFilter.addEventListener('change', filterAdvisors);
+            resetBtn.addEventListener('click', () => {
+                categoryFilter.value = 'all';
+                stateFilter.value = 'all';
+                filterAdvisors();
+            });
+        });
+    </script>
+</body>
+</html>

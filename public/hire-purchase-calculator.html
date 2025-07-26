@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Kalkulator Pinjaman Proton | Kira Ansuran Bulanan</title>
+    
+    <meta name="description" content="Kira anggaran ansuran bulanan dan kelayakan gaji untuk model-model Proton seperti Saga, X50, X70, dan S70. Mudah, pantas dan percuma.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kqaCT9vbCjDqNzcrD3Tcw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #D62828; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; --whatsapp-color: #25D366; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .calculator-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .calculator-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .header-buttons { display: flex; flex-wrap: wrap; gap: 10px; position: relative; }
+        .action-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .action-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .action-button:disabled { background-color: #ccc; cursor: not-allowed; border-color: #ccc; }
+        .whatsapp-button { background-color: var(--whatsapp-color); color: white; border-color: var(--whatsapp-color); }
+        .whatsapp-button:hover { background-color: #20b859; border-color: #20b859; }
+        .share-dropdown { display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); border: 1px solid var(--border-color); width: 220px; z-index: 10; overflow: hidden; }
+        .share-dropdown.show { display: block; }
+        .share-dropdown a, .share-dropdown button { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--font-color); text-decoration: none; font-size: 0.95rem; border: none; width: 100%; text-align: left; background: none; cursor: pointer; }
+        .share-dropdown a:hover, .share-dropdown button:hover { background-color: var(--secondary-color); }
+        .share-dropdown i { width: 20px; text-align: center; color: #555; }
+        .share-dropdown hr { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .clickable-banner { display: block; margin: 30px auto; max-width: 728px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+        .clickable-banner img { width: 100%; height: auto; display: block; }
+        .calculator-layout { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        @media (min-width: 768px) { .calculator-layout { grid-template-columns: 1fr 1fr; } }
+        .card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 30px; box-shadow: var(--card-shadow); }
+        .card h2 { margin-top: 0; font-size: 1.5rem; color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background-color: white; }
+        .calculate-btn { width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--primary-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; }
+        .calculate-btn:hover { background-color: var(--accent-color); }
+        .result-display p { display: flex; justify-content: space-between; font-size: 1.1rem; margin: 15px 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .result-display span { font-weight: 600; }
+        .result-display .main-result span { font-size: 1.8rem; color: var(--primary-color); }
+        .suggestion-card { margin-top: 20px; }
+        .radio-group { display: flex; gap: 20px; margin-bottom: 10px; }
+        .radio-group label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .calculator-header h1 { font-size: 1.5rem; }
+            .card { padding: 20px; }
+            .card h2 { font-size: 1.3rem; }
+            .form-group label { font-size: 0.9rem; }
+            .form-group input, .form-group select { padding: 12px; font-size: 1rem; }
+            .result-display p { font-size: 1rem; }
+            .result-display .main-result span { font-size: 1.6rem; }
+            .calculate-btn, .action-button { padding: 12px 15px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="calculator-header">
+            <h1>Kalkulator Pinjaman Proton</h1>
+            <div class="header-buttons">
+                <a href="index.html" class="action-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                <button id="share-btn" class="action-button"><i class="fa-solid fa-share-nodes"></i> Kongsi</button>
+                <div id="share-dropdown" class="share-dropdown">
+                    <button id="copy-link-btn"><i class="fa-solid fa-link"></i> Salin Pautan</button>
+                    <button id="screenshot-btn"><i class="fa-solid fa-camera"></i> Tangkapan Skrin</button>
+                    <button id="pdf-btn"><i class="fa-solid fa-file-pdf"></i> Simpan sebagai PDF</button>
+                </div>
+                <button id="whatsapp-btn" class="action-button whatsapp-button"><i class="fa-brands fa-whatsapp"></i> Hubungi Saya</button>
+            </div>
+        </header>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+        <div id="capture-area">
+            <main class="calculator-layout">
+                <div class="card">
+                    <h2>Maklumat Pinjaman Kereta</h2>
+                    <form id="hp-form">
+                        <div class="form-group"><label for="region">Lokasi</label><select id="region"><option value="peninsular">Semenanjung Malaysia</option><option value="east_malaysia">Malaysia Timur (Sabah/Sarawak)</option></select></div>
+                        <div class="form-group"><label for="model">Model / Varian Proton</label><select id="model"></select></div>
+                        <div class="form-group"><label for="carPrice">Harga Kereta (RM)</label><input type="number" id="carPrice" required></div>
+                        <div class="form-group"><label>Jenis Pinjaman</label><div class="radio-group"><label><input type="radio" name="loanType" value="deposit" checked> Dengan Deposit</label><label><input type="radio" name="loanType" value="full"> Full Loan</label></div></div>
+                        <div class="form-group" id="downPayment-group"><label for="downPayment">Bayaran Pendahuluan (RM)</label><input type="number" id="downPayment" value="8500" required></div>
+                        <div class="form-group"><label for="rebate">Diskaun / Rebat (RM)</label><input type="number" id="rebate" value="0" required></div>
+                        <div class="form-group"><label for="interestRate">Kadar Faedah Tahunan (%)</label><input type="number" id="interestRate" step="0.01" value="2.8" required></div>
+                        <div class="form-group"><label for="loanTenure">Tempoh Pinjaman (Tahun)</label><input type="number" id="loanTenure" value="9" required></div>
+                        <button type="submit" class="calculate-btn">Kira Ansuran</button>
+                    </form>
+                </div>
+                <div class="card" id="results-card">
+                    <h2>Ringkasan Pinjaman</h2>
+                    <div class="result-display">
+                        <p class="main-result">Ansuran Bulanan: <span id="monthlyPayment">RM 0.00</span></p>
+                        <p class="main-result">Kelayakan Gaji Bersih: <span id="netSalary">RM 0.00</span></p>
+                        <hr style="margin: 20px 0; border-color: var(--border-color);">
+                        <p>Jumlah Pinjaman: <span id="loanAmount">RM 0.00</span></p>
+                        <p>Jumlah Faedah: <span id="totalInterest">RM 0.00</span></p>
+                        <p>Jumlah Bayaran Balik: <span id="totalPayment">RM 0.00</span></p>
+                    </div>
+                    <div class="suggestion-card" id="suggestion-card">
+                        </div>
+                </div>
+            </main>
+        </div>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner" style="margin-top: 30px;">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        const carPriceList = {
+            peninsular: { 'Pilih Model': 0, 'Saga 1.3 Standard AT': 38800, 'Saga 1.3 Premium AT': 41800, 'Saga 1.3 Premium S AT': 44800, 'Persona 1.6 Standard': 47800, 'Persona 1.6 Executive': 52300, 'Persona 1.6 Premium': 58300, 'Iriz 1.3 Standard': 42764, 'S70 1.5T Executive': 75912, 'S70 1.5T Premium': 82061, 'S70 1.5T Flagship': 92309, 'S70 1.5T Flagship X': 97433, 'X50 1.5T Standard': 86300, 'X50 1.5T Executive': 93200, 'X50 1.5T Premium': 101800, 'X50 1.5T Flagship': 113300, 'X70 1.5T Standard': 98800, 'X70 1.5T Executive': 110800, 'X70 1.5T Premium': 123800, 'X70 1.8T Premium X': 126800, 'X90 1.5T Standard': 123800, 'X90 1.5T Executive': 130800, 'X90 1.5T Premium': 144800, 'X90 1.5T Flagship': 152800 },
+            east_malaysia: { 'Pilih Model': 0, 'Saga Standard 1.3 AT': 41790, 'Saga Premium 1.3 AT': 44849, 'Saga Premium S 1.3AT': 47889, 'Persona 1.6CVT Standard': 50991, 'Persona 1.6CVT Executive': 56589, 'Persona 1.6CVT Premium': 61688, 'Iriz 1.3CVT Standard': 45869, 'Iriz 1.6CVT Executive': 53530, 'Iriz 1.6CVT Active': 60668, 'X50 1.5 Turbo Standard': 90133, 'X50 1.5 Turbo Executive': 97264, 'X50 1.5 Turbo Premium': 105931, 'X50 1.5 TGDi Flagship': 117636, 'X70 1.5 TGDi Standard': 102876, 'X70 1.5 TGDi Executive': 115099, 'X70 1.5 TGDi Premium': 128341, 'X70 1.5 TGDi Premium X': 131397, 'X90 1.5 TGDi BSG Standard 7 Seater': 128341, 'X90 1.5 TGDi BSG Executive 7 Seater': 135472, 'X90 1.5 TGDi BSG Premium 7 Seater': 149733, 'X90 1.5 TGDi BSG Flagship 6 Seater': 157882, 'S70 1.5T 7 Speed DCT Executive': 77612, 'S70 1.5T 7 Speed DCT Premium': 83730, 'S70 1.5T 7 Speed DCT Flagship': 93927, 'S70 1.5T 7 Speed DCT Flagship X': 99026 }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const regionSelect = document.getElementById('region');
+            const modelSelect = document.getElementById('model');
+            const carPriceInput = document.getElementById('carPrice');
+            const hpForm = document.getElementById('hp-form');
+            const loanTypeRadios = document.querySelectorAll('input[name="loanType"]');
+            const downPaymentGroup = document.getElementById('downPayment-group');
+            
+            function updateModels() {
+                const selectedRegion = regionSelect.value;
+                const models = carPriceList[selectedRegion];
+                modelSelect.innerHTML = Object.keys(models).map(model => `<option value="${model}">${model}</option>`).join('');
+                updatePrice();
+            }
+
+            function updatePrice() {
+                const selectedRegion = regionSelect.value;
+                const selectedModel = modelSelect.value;
+                if (selectedModel && carPriceList[selectedRegion][selectedModel] > 0) {
+                    carPriceInput.value = carPriceList[selectedRegion][selectedModel];
+                } else { carPriceInput.value = ''; }
+            }
+            
+            function updateSuggestionCard() {
+                const suggestionCard = document.getElementById('suggestion-card');
+                suggestionCard.innerHTML = `<button id="whatsapp-btn-bottom" class="action-button whatsapp-button" style="width:100%; border-radius: 8px; padding: 15px; font-size: 1.1rem;"><i class="fa-brands fa-whatsapp"></i> Hantar Pengiraan ke WhatsApp</button>`;
+                document.getElementById('whatsapp-btn-bottom').addEventListener('click', handleWhatsAppShare);
+            }
+
+            function toggleDownPayment() {
+                const loanType = document.querySelector('input[name="loanType"]:checked').value;
+                downPaymentGroup.style.display = (loanType === 'full') ? 'none' : 'block';
+            }
+
+            regionSelect.addEventListener('change', updateModels);
+            modelSelect.addEventListener('change', updatePrice);
+            loanTypeRadios.forEach(radio => radio.addEventListener('change', toggleDownPayment));
+            hpForm.addEventListener('submit', (e) => { 
+                e.preventDefault(); 
+                calculateAndDisplay(); 
+                updateSuggestionCard();
+            });
+            
+            updateModels();
+            toggleDownPayment();
+            updateSuggestionCard();
+
+            const shareBtn = document.getElementById('share-btn');
+            const shareDropdown = document.getElementById('share-dropdown');
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            shareBtn.addEventListener('click', () => shareDropdown.classList.toggle('show'));
+            window.addEventListener('click', (e) => { if (!shareBtn.contains(e.target) && !shareDropdown.contains(e.target)) { shareDropdown.classList.remove('show'); } });
+            document.getElementById('copy-link-btn').addEventListener('click', copyLink);
+            document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+            document.getElementById('pdf-btn').addEventListener('click', saveAsPdf);
+            whatsappBtn.addEventListener('click', handleWhatsAppShare);
+        });
+
+        function calculateAndDisplay() {
+            const carPrice = parseFloat(document.getElementById('carPrice').value) || 0;
+            const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+            const loanTenure = parseInt(document.getElementById('loanTenure').value) || 0;
+            const rebate = parseFloat(document.getElementById('rebate').value) || 0;
+            const loanType = document.querySelector('input[name="loanType"]:checked').value;
+            
+            let downPayment = (loanType === 'full') ? 0 : (parseFloat(document.getElementById('downPayment').value) || 0);
+
+            if (carPrice <= 0 || loanTenure <= 0 || (downPayment + rebate) >= carPrice) {
+                alert("Sila masukkan nilai yang sah."); return;
+            }
+
+            let loanAmount = carPrice - downPayment - rebate;
+            const loanToValue = (carPrice - downPayment) / carPrice;
+
+            if (loanToValue > 0.90) {
+                loanAmount += 250;
+            }
+            
+            loanAmount = Math.ceil(loanAmount / 100) * 100;
+
+            const totalInterest = loanAmount * (interestRate / 100) * loanTenure;
+            const totalPayment = loanAmount + totalInterest;
+            const monthlyPayment = totalPayment / (loanTenure * 12);
+            
+            const netSalary = monthlyPayment / 0.30;
+
+            document.getElementById('monthlyPayment').textContent = `RM ${monthlyPayment.toFixed(2)}`;
+            document.getElementById('netSalary').textContent = `RM ${netSalary.toFixed(2)}`;
+            document.getElementById('loanAmount').textContent = `RM ${loanAmount.toFixed(2)}`;
+            document.getElementById('totalInterest').textContent = `RM ${totalInterest.toFixed(2)}`;
+            document.getElementById('totalPayment').textContent = `RM ${totalPayment.toFixed(2)}`;
+        }
+
+        function handleWhatsAppShare() {
+            const model = document.getElementById('model').value;
+            const price = document.getElementById('carPrice').value;
+            const monthlyPayment = document.getElementById('monthlyPayment').textContent;
+            const netSalary = document.getElementById('netSalary').textContent;
+
+            if (monthlyPayment.includes("0.00")) {
+                alert("Sila kira ansuran terlebih dahulu sebelum menghantar.");
+                return;
+            }
+
+            let message = `Salam, saya telah menggunakan Kalkulator Pinjaman Kereta dan berminat dengan pengiraan berikut.\n\n`;
+            message += `*RINGKASAN PENGIRAAN PINJAMAN*\n\n`;
+            message += `Model: *Proton ${model}*\n`;
+            message += `Harga Kereta: *RM ${price}*\n`;
+            message += `Anggaran Ansuran Bulanan: *${monthlyPayment}*\n`;
+            message += `Anggaran Kelayakan Gaji: *${netSalary}*\n\n`;
+            message += `Bolehkah saya dapatkan maklumat lanjut mengenai promosi dan proses permohonan? Terima kasih.`;
+            
+            const whatsappURL = `https://wa.me/601171111239?text=${encodeURIComponent(message)}`;
+            window.open(whatsappURL, '_blank');
+        }
+
+        function takeScreenshot() { html2canvas(document.getElementById('capture-area')).then(canvas => { const link = document.createElement('a'); link.download = 'ringkasan-pinjaman-proton.png'; link.href = canvas.toDataURL('image/png'); link.click(); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function saveAsPdf() { const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' }); html2canvas(document.getElementById('capture-area')).then(canvas => { const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth(); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight); doc.save('laporan-pinjaman-proton.pdf'); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href).then(() => alert('Pautan telah disalin!')); document.getElementById('share-dropdown').classList.remove('show'); }
+    </script>
+</body>
+</html>

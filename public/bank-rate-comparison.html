@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perbandingan Kadar Faedah Bank di Malaysia | Pinjaman Kereta & Rumah</title>
+    <meta name="description" content="Bandingkan kadar faedah pinjaman kereta (sewa beli) dan perumahan (mortgage) dari bank-bank utama di Malaysia seperti Maybank, CIMB, Public Bank, dan banyak lagi.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+wFjr8bCqwY2SA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #3A7CA5; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .calculator-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .calculator-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .header-buttons { display: flex; gap: 10px; position: relative; }
+        .action-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .action-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .share-dropdown { display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); border: 1px solid var(--border-color); width: 220px; z-index: 10; overflow: hidden; }
+        .share-dropdown.show { display: block; }
+        .share-dropdown a, .share-dropdown button { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--font-color); text-decoration: none; font-size: 0.95rem; border: none; width: 100%; text-align: left; background: none; cursor: pointer; }
+        .share-dropdown a:hover, .share-dropdown button:hover { background-color: var(--secondary-color); }
+        .share-dropdown i { width: 20px; text-align: center; color: #555; }
+        .share-dropdown hr { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .clickable-banner { display: block; margin: 30px auto; max-width: 728px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+        .clickable-banner img { width: 100%; height: auto; display: block; }
+        .card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 30px; box-shadow: var(--card-shadow); }
+        .filter-buttons { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .filter-btn { padding: 10px 20px; border: 2px solid var(--border-color); background-color: var(--card-bg); color: var(--font-color); border-radius: 50px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+        .filter-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .rate-table { width: 100%; border-collapse: collapse; }
+        .rate-table th, .rate-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .rate-table th { font-weight: 600; color: var(--primary-color); }
+        .rate-table td:nth-child(2), .rate-table td:nth-child(3) { text-align: center; }
+        .disclaimer { font-size: 0.85rem; color: #6c757d; text-align: center; margin-top: 20px; font-style: italic; }
+    </style>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "Perbandingan Kadar Faedah Bank di Malaysia",
+      "description": "Jadual perbandingan kadar faedah indikatif untuk pinjaman sewa beli (kereta) dan pinjaman perumahan (mortgage) dari bank-bank utama di Malaysia.",
+      "mainEntity": { "@type": "Table", "about": "Kadar Faedah Pinjaman Bank di Malaysia" }
+    }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header class="calculator-header">
+            <h1>Perbandingan Kadar Faedah</h1>
+            <div class="header-buttons">
+                <a href="index.html" class="action-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                <button id="share-btn" class="action-button"><i class="fa-solid fa-share-nodes"></i> Kongsi</button>
+                <div id="share-dropdown" class="share-dropdown">
+                    <button id="copy-link-btn"><i class="fa-solid fa-link"></i> Salin Pautan</button>
+                    <button id="screenshot-btn"><i class="fa-solid fa-camera"></i> Tangkapan Skrin</button>
+                    <button id="pdf-btn"><i class="fa-solid fa-file-pdf"></i> Simpan sebagai PDF</button>
+                    <hr>
+                    <a id="whatsapp-share" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a id="facebook-share" href="#" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a id="twitter-share" href="#" target="_blank"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </header>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 30px auto; padding: 0 15px;">
+            <p>Bandingkan <strong>kadar faedah pinjaman</strong> indikatif dari bank-bank utama di Malaysia. Jadual ini merangkumi kadar untuk <strong>pinjaman sewa beli (kereta)</strong> dan <strong>pinjaman perumahan (mortgage)</strong> untuk membantu anda membuat pilihan terbaik.</p>
+        </div>
+        <div id="capture-area" class="card">
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all">Semua</button>
+                <button class="filter-btn" data-filter="hp">Sewa Beli</button>
+                <button class="filter-btn" data-filter="mortgage">Perumahan</button>
+            </div>
+            <table class="rate-table">
+                <thead><tr><th>Bank</th><th>Kadar Sewa Beli (p.a.)</th><th>Kadar Perumahan (p.a.)</th></tr></thead>
+                <tbody>
+                    <tr data-type="hp mortgage"><td>Maybank</td><td>3.40% - 4.25%</td><td>4.15% - 5.67%</td></tr>
+                    <tr data-type="hp mortgage"><td>CIMB</td><td>2.85% - 4.45%</td><td>4.15% - 5.67%</td></tr>
+                    <tr data-type="hp mortgage"><td>Public Bank</td><td>3.31% - 4.10%</td><td>4.15% - 5.67%</td></tr>
+                    <tr data-type="hp mortgage"><td>RHB Bank</td><td>3.18%</td><td>dari 4.10%</td></tr>
+                    <tr data-type="hp mortgage"><td>Hong Leong</td><td>3.24% - 3.78%</td><td>4.15% - 5.67%</td></tr>
+                    <tr data-type="hp mortgage"><td>AmBank</td><td>3.05% - 3.66%</td><td>4.15% - 5.67%</td></tr>
+                    <tr data-type="mortgage"><td>OCBC</td><td>-</td><td>4.15% - 5.67%</td></tr>
+                    <tr data-type="hp mortgage"><td>Bank Islam</td><td>3.00% - 3.60%</td><td>dari 3.80%</td></tr>
+                    <tr data-type="hp"><td>Affin Bank</td><td>2.92% - 3.00%</td><td>-</td></tr>
+                    <tr data-type="mortgage"><td>Bank Muamalat</td><td>-</td><td>SBR + margin (dari 3.00%)</td></tr>
+                    <tr data-type="hp"><td>BSN</td><td>2.55%</td><td>-</td></tr>
+                    <tr data-type="hp"><td>KFH</td><td>2.50%</td><td>-</td></tr>
+                </tbody>
+            </table>
+            <p class="disclaimer">*Always confirm the latest rates and terms directly with the bank, as promotions and packages may change frequently.</p>
+        </div>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner" style="margin-top: 30px;">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+    </div>
+    <script>
+        const { jsPDF } = window.jspdf;
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const tableRows = document.querySelectorAll('.rate-table tbody tr');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    const filter = this.getAttribute('data-filter');
+                    tableRows.forEach(row => {
+                        const type = row.getAttribute('data-type');
+                        if (filter === 'all' || type.includes(filter)) { row.style.display = ''; }
+                        else { row.style.display = 'none'; }
+                    });
+                });
+            });
+            const shareBtn = document.getElementById('share-btn');
+            const shareDropdown = document.getElementById('share-dropdown');
+            shareBtn.addEventListener('click', () => shareDropdown.classList.toggle('show'));
+            window.addEventListener('click', (e) => { if (!shareBtn.contains(e.target) && !shareDropdown.contains(e.target)) { shareDropdown.classList.remove('show'); } });
+            document.getElementById('copy-link-btn').addEventListener('click', copyLink);
+            document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+            document.getElementById('pdf-btn').addEventListener('click', saveAsPdf);
+            updateSocialShareLinks();
+        });
+        function takeScreenshot() {
+            html2canvas(document.getElementById('capture-area')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = 'perbandingan-kadar-faedah-bank.png';
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+            document.getElementById('share-dropdown').classList.remove('show');
+        }
+        function saveAsPdf() {
+            const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' });
+            html2canvas(document.getElementById('capture-area')).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const imgProps = doc.getImageProperties(imgData);
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+                doc.addImage(imgData, 'PNG', 15, 40, pdfWidth - 30, pdfHeight - 60);
+                doc.save('perbandingan-kadar-faedah-bank.pdf');
+            });
+            document.getElementById('share-dropdown').classList.remove('show');
+        }
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => alert('Pautan telah disalin!'));
+            document.getElementById('share-dropdown').classList.remove('show');
+        }
+        function updateSocialShareLinks() {
+            const pageUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent("Bandingkan kadar faedah pinjaman terkini dari bank-bank di Malaysia di sini!");
+            document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareText} ${pageUrl}`;
+            document.getElementById('facebook-share').href = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
+            document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${shareText}`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Insurans Kereta Malaysia | Anggaran Premium 2025</title>
+    <meta name="description" content="Kira anggaran premium insurans kereta komprehensif anda di Malaysia. Dapatkan pecahan harga termasuk NCD, SST, dan perlindungan tambahan seperti cermin depan dan bencana alam.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+wFjr8bCqwY2SA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #3A7CA5; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .calculator-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .calculator-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .header-buttons { display: flex; gap: 10px; position: relative; }
+        .action-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .action-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .share-dropdown { display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); border: 1px solid var(--border-color); width: 220px; z-index: 10; overflow: hidden; }
+        .share-dropdown.show { display: block; }
+        .share-dropdown a, .share-dropdown button { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--font-color); text-decoration: none; font-size: 0.95rem; border: none; width: 100%; text-align: left; background: none; cursor: pointer; }
+        .share-dropdown a:hover, .share-dropdown button:hover { background-color: var(--secondary-color); }
+        .share-dropdown i { width: 20px; text-align: center; color: #555; }
+        .share-dropdown hr { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .clickable-banner { display: block; margin: 30px auto; max-width: 728px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+        .clickable-banner img { width: 100%; height: auto; display: block; }
+        .calculator-layout { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        @media (min-width: 768px) { .calculator-layout { grid-template-columns: 1fr 1fr; } }
+        .card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 30px; box-shadow: var(--card-shadow); }
+        .card h2 { margin-top: 0; font-size: 1.5rem; color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .result-display p { display: flex; justify-content: space-between; font-size: 1.1rem; margin: 10px 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .result-display span { font-weight: 600; }
+        .result-display .total-premium span { font-size: 1.8rem; color: var(--primary-color); }
+        .addon-container { margin-top: 20px; }
+        .addon-item { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .addon-item input[type="checkbox"] { width: 20px; height: 20px; }
+        .hidden-addon { max-height: 0; opacity: 0; overflow: hidden; transition: all 0.3s ease-in-out; margin-top: 0 !important; }
+        .visible-addon { max-height: 100px; opacity: 1; margin-top: 1rem !important; }
+
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .calculator-header h1 { font-size: 1.5rem; }
+            .card h2 { font-size: 1.2rem; }
+            .form-group label { font-size: 0.9rem; }
+            .form-group input, .form-group select { padding: 10px 12px; font-size: 0.95rem; }
+            .result-display p { font-size: 0.9rem; flex-direction: column; align-items: flex-start; gap: 4px; }
+            .result-display span { font-size: 0.95rem; }
+            .result-display .total-premium span { font-size: 1.5rem; }
+            .action-button { padding: 10px 15px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="calculator-header">
+            <h1>Kalkulator Insurans Kereta</h1>
+            <div class="header-buttons">
+                <a href="index.html" class="action-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                <button id="share-btn" class="action-button"><i class="fa-solid fa-share-nodes"></i> Kongsi</button>
+                <div id="share-dropdown" class="share-dropdown">
+                    <button id="copy-link-btn"><i class="fa-solid fa-link"></i> Salin Pautan</button>
+                    <button id="screenshot-btn"><i class="fa-solid fa-camera"></i> Tangkapan Skrin</button>
+                    <button id="pdf-btn"><i class="fa-solid fa-file-pdf"></i> Simpan sebagai PDF</button>
+                    <hr>
+                    <a id="whatsapp-share" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a id="facebook-share" href="#" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a id="twitter-share" href="#" target="_blank"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </header>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 30px auto; padding: 0 15px;">
+            <p>Dapatkan <strong>anggaran premium insurans kereta</strong> anda untuk tahun 2025. <strong>Kalkulator insurans</strong> kami membantu anda memahami kos pembaharuan polisi komprehensif di <strong>Malaysia</strong>, termasuk diskaun <strong>NCD</strong>, SST, dan perlindungan tambahan seperti cermin depan dan banjir.</p>
+        </div>
+        <div id="capture-area">
+            <main class="calculator-layout">
+                <div class="card">
+                    <h2>Maklumat Kenderaan</h2>
+                    <div class="form-group"><label for="region">Lokasi</label><select id="region"><option value="peninsular">Semenanjung Malaysia</option><option value="east">Malaysia Timur (Sabah/Sarawak)</option></select></div>
+                    <div class="form-group"><label for="engine-capacity">Kapasiti Enjin (CC)</label><select id="engine-capacity"><option value="1400">Bawah 1400cc</option><option value="1650" selected>1401cc - 1650cc</option><option value="2200">1651cc - 2200cc</option><option value="3050">2201cc - 3050cc</option><option value="4100">3051cc - 4100cc</option><option value="4250">4101cc - 4250cc</option><option value="4400">4251cc - 4400cc</option><option value="9999">Atas 4400cc</option></select></div>
+                    <div class="form-group"><label for="sum-insured-input">Nilai Dilindungi (Sum Insured)</label><input type="number" id="sum-insured-input" min="10000" max="250000" step="500" value="60000"></div>
+                    <div class="form-group"><label for="ncd">Diskaun Tanpa Tuntutan (NCD)</label><select id="ncd"><option value="0">0%</option><option value="25">25%</option><option value="30">30%</option><option value="38.33">38.33%</option><option value="45" selected>45%</option><option value="55">55%</option></select></div>
+                    <div class="addon-container">
+                        <h2>Perlindungan Tambahan</h2>
+                        <div class="addon-item"><input type="checkbox" id="special-perils"><label for="special-perils">Bencana Alam (Special Perils)</label></div>
+                        <div class="addon-item"><input type="checkbox" id="windscreen"><label for="windscreen">Cermin Depan (Windscreen)</label></div>
+                        <div id="windscreen-value-container" class="form-group hidden-addon pl-8"><label for="windscreen-value">Nilai Cermin Depan (RM)</label><input type="number" id="windscreen-value" placeholder="cth: 1000"></div>
+                    </div>
+                </div>
+                <div class="card" id="results-card">
+                    <h2>Anggaran Premium</h2>
+                    <div class="result-display">
+                        <p class="total-premium">Jumlah Perlu Dibayar: <span id="total-premium">RM 0.00</span></p>
+                        <hr style="margin: 20px 0; border-color: var(--border-color);">
+                        <p>Premium Asas: <span id="basic-premium">RM 0.00</span></p>
+                        <p>Diskaun NCD (<span id="ncd-rate-display">0</span>%): <span id="ncd-discount" style="color: green;">- RM 0.00</span></p>
+                        <p>Premium Selepas NCD: <span id="premium-after-ncd">RM 0.00</span></p>
+                        <div id="addons-breakdown"></div>
+                        <p><strong>Premium Kasar:</strong> <strong id="gross-premium">RM 0.00</strong></p>
+                        <hr style="margin: 10px 0; border-color: var(--border-color);">
+                        <p>6% SST: <span id="sst">+ RM 0.00</span></p>
+                        <p>Duti Setem: <span>+ RM 10.00</span></p>
+                    </div>
+                </div>
+            </main>
+        </div>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner" style="margin-top: 30px;">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+    </div>
+    <script>
+        const { jsPDF } = window.jspdf;
+        const premiumRates = {
+            peninsular: { ratePer1000: 26, first1000: { 1400: 273.80, 1650: 305.50, 2200: 339.10, 3050: 372.60, 4100: 404.30, 4250: 436.00, 4400: 469.60, 9999: 501.30 } },
+            east: { ratePer1000: 20.30, first1000: { 1400: 196.20, 1650: 220.00, 2200: 243.90, 3050: 266.50, 4100: 290.40, 4250: 313.00, 4400: 336.40, 9999: 359.50 } }
+        };
+        const ADDON_RATES = { specialPerils: 0.005, windscreen: 0.15 };
+        document.addEventListener('DOMContentLoaded', function() {
+            const allInputs = ['region', 'engine-capacity', 'ncd', 'sum-insured-input', 'special-perils', 'windscreen', 'windscreen-value'];
+            allInputs.forEach(id => document.getElementById(id).addEventListener('input', calculatePremium));
+            document.getElementById('windscreen').addEventListener('change', (e) => {
+                const container = document.getElementById('windscreen-value-container');
+                container.classList.toggle('hidden-addon', !e.target.checked);
+                container.classList.toggle('visible-addon', e.target.checked);
+                if (!e.target.checked) { document.getElementById('windscreen-value').value = ''; calculatePremium(); }
+            });
+            const shareBtn = document.getElementById('share-btn');
+            const shareDropdown = document.getElementById('share-dropdown');
+            shareBtn.addEventListener('click', () => shareDropdown.classList.toggle('show'));
+            window.addEventListener('click', (e) => { if (!shareBtn.contains(e.target) && !shareDropdown.contains(e.target)) { shareDropdown.classList.remove('show'); } });
+            document.getElementById('copy-link-btn').addEventListener('click', copyLink);
+            document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+            document.getElementById('pdf-btn').addEventListener('click', saveAsPdf);
+            updateSocialShareLinks();
+            calculatePremium();
+        });
+        function calculatePremium() {
+            const region = document.getElementById('region').value;
+            const engineCC = parseInt(document.getElementById('engine-capacity').value);
+            const ncdRate = parseFloat(document.getElementById('ncd').value);
+            const sumInsured = parseInt(document.getElementById('sum-insured-input').value) || 0;
+            const isSpecialPerils = document.getElementById('special-perils').checked;
+            const isWindscreen = document.getElementById('windscreen').checked;
+            const windscreenValue = parseInt(document.getElementById('windscreen-value').value) || 0;
+            const rates = premiumRates[region];
+            const first1000Premium = rates.first1000[engineCC];
+            const remainingPremium = sumInsured > 1000 ? ((sumInsured - 1000) / 1000) * rates.ratePer1000 : 0;
+            const basicPremium = first1000Premium + remainingPremium;
+            const ncdDiscount = basicPremium * (ncdRate / 100);
+            const premiumAfterNCD = basicPremium - ncdDiscount;
+            const specialPerilsCost = isSpecialPerils ? sumInsured * ADDON_RATES.specialPerils : 0;
+            const windscreenCost = isWindscreen ? windscreenValue * ADDON_RATES.windscreen : 0;
+            const grossPremium = premiumAfterNCD + specialPerilsCost + windscreenCost;
+            const sst = grossPremium * 0.06;
+            const stampDuty = 10;
+            const totalPayable = grossPremium + sst + stampDuty;
+            document.getElementById('total-premium').textContent = `RM ${totalPayable.toFixed(2)}`;
+            document.getElementById('basic-premium').textContent = `RM ${basicPremium.toFixed(2)}`;
+            document.getElementById('ncd-rate-display').textContent = ncdRate;
+            document.getElementById('ncd-discount').textContent = `- RM ${ncdDiscount.toFixed(2)}`;
+            document.getElementById('premium-after-ncd').textContent = `RM ${premiumAfterNCD.toFixed(2)}`;
+            document.getElementById('gross-premium').textContent = `RM ${grossPremium.toFixed(2)}`;
+            document.getElementById('sst').textContent = `+ RM ${sst.toFixed(2)}`;
+            const addonsBreakdown = document.getElementById('addons-breakdown');
+            addonsBreakdown.innerHTML = '';
+            if (isSpecialPerils) { addonsBreakdown.innerHTML += `<p>Bencana Alam: <span>+ RM ${specialPerilsCost.toFixed(2)}</span></p>`; }
+            if (isWindscreen) { addonsBreakdown.innerHTML += `<p>Cermin Depan: <span>+ RM ${windscreenCost.toFixed(2)}</span></p>`; }
+        }
+        function takeScreenshot() { html2canvas(document.getElementById('capture-area')).then(canvas => { const link = document.createElement('a'); link.download = 'anggaran-insurans-kereta.png'; link.href = canvas.toDataURL('image/png'); link.click(); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function saveAsPdf() { const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' }); html2canvas(document.getElementById('capture-area')).then(canvas => { const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth(); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight); doc.save('anggaran-insurans-kereta.pdf'); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href).then(() => alert('Pautan telah disalin!')); document.getElementById('share-dropdown').classList.remove('show'); }
+        function updateSocialShareLinks() {
+            const pageUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent("Gunakan kalkulator ini untuk mengira anggaran premium insurans kereta anda!");
+            document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareText} ${pageUrl}`;
+            document.getElementById('facebook-share').href = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
+            document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${shareText}`;
+        }
+    </script>
+</body>
+</html>

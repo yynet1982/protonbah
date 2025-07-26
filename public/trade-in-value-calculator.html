@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Title -->
+    <title>Kalkulator Nilai Trade-In Kereta | Anggaran Harga Semasa 2025</title>
+    
+    <!-- SEO Description -->
+    <meta name="description" content="Dapatkan anggaran nilai 'trade-in' atau harga pasaran semasa untuk kereta terpakai anda di Malaysia. Kalkulator kami menggunakan formula susut nilai untuk memberi anda idea kasar.">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- JavaScript Libraries for Sharing Features -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+wFjr8bCqwY2SA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #3A7CA5; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .calculator-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .calculator-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .header-buttons { display: flex; gap: 10px; position: relative; }
+        .action-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .action-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .share-dropdown { display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); border: 1px solid var(--border-color); width: 220px; z-index: 10; overflow: hidden; }
+        .share-dropdown.show { display: block; }
+        .share-dropdown a, .share-dropdown button { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--font-color); text-decoration: none; font-size: 0.95rem; border: none; width: 100%; text-align: left; background: none; cursor: pointer; }
+        .share-dropdown a:hover, .share-dropdown button:hover { background-color: var(--secondary-color); }
+        .share-dropdown i { width: 20px; text-align: center; color: #555; }
+        .share-dropdown hr { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .clickable-banner { display: block; margin: 30px auto; max-width: 728px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+        .clickable-banner img { width: 100%; height: auto; display: block; }
+        .calculator-layout { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        @media (min-width: 768px) { .calculator-layout { grid-template-columns: 1fr 1fr; } }
+        .card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 30px; box-shadow: var(--card-shadow); }
+        .card h2 { margin-top: 0; font-size: 1.5rem; color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background-color: white; }
+        .calculate-btn { width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--primary-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; }
+        .calculate-btn:hover { background-color: var(--accent-color); }
+        .result-display p { display: flex; justify-content: space-between; font-size: 1.1rem; margin: 15px 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .result-display span { font-weight: 600; }
+        .result-display .main-result span { font-size: 1.8rem; color: var(--primary-color); }
+        .disclaimer { font-size: 0.8rem; color: #6c757d; text-align: center; margin-top: 15px; font-style: italic; }
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .calculator-header h1 { font-size: 1.5rem; }
+            .card { padding: 20px; }
+            .card h2 { font-size: 1.2rem; }
+            .form-group label { font-size: 0.9rem; }
+            .form-group input, .form-group select { padding: 12px; font-size: 1rem; }
+            .result-display p { font-size: 0.95rem; }
+            .result-display .main-result span { font-size: 1.5rem; }
+            .calculate-btn, .action-button { padding: 12px 15px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="calculator-header">
+            <h1>Kalkulator Nilai Trade-In</h1>
+            <div class="header-buttons">
+                <a href="index.html" class="action-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                <button id="share-btn" class="action-button"><i class="fa-solid fa-share-nodes"></i> Kongsi</button>
+                <div id="share-dropdown" class="share-dropdown">
+                    <button id="copy-link-btn"><i class="fa-solid fa-link"></i> Salin Pautan</button>
+                    <button id="screenshot-btn"><i class="fa-solid fa-camera"></i> Tangkapan Skrin</button>
+                    <button id="pdf-btn"><i class="fa-solid fa-file-pdf"></i> Simpan sebagai PDF</button>
+                </div>
+            </div>
+        </header>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+        <div id="capture-area">
+            <main class="calculator-layout">
+                <div class="card">
+                    <h2>Maklumat Kereta Anda</h2>
+                    <form id="trade-in-form">
+                        <div class="form-group"><label for="originalPrice">Harga Asal Kereta (RM)</label><input type="number" id="originalPrice" value="85000" required></div>
+                        <div class="form-group"><label for="modelYear">Tahun Model Kereta</label><input type="number" id="modelYear" value="2020" min="1980" max="2025" required></div>
+                        <div class="form-group">
+                            <label for="brand">Jenama Kereta</label>
+                            <select id="brand">
+                                <option value="perodua">Perodua</option>
+                                <option value="honda">Honda</option>
+                                <option value="toyota">Toyota</option>
+                                <option value="proton">Proton</option>
+                                <option value="others" selected>Jenama Lain (Anggaran Purata)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="calculate-btn">Kira Nilai Anggaran</button>
+                    </form>
+                </div>
+                <div class="card" id="results-card">
+                    <h2>Anggaran Nilai Semasa</h2>
+                    <div class="result-display">
+                        <p class="main-result">Anggaran Nilai Trade-In: <span id="estimatedValue">RM 0.00</span></p>
+                        <hr style="margin: 20px 0; border-color: var(--border-color);">
+                        <p>Harga Asal: <span id="displayOriginalPrice">RM 0.00</span></p>
+                        <p>Usia Kereta: <span id="displayCarAge">0 Tahun</span></p>
+                        <p>Jumlah Susut Nilai: <span id="displayTotalDepreciation">RM 0.00</span></p>
+                    </div>
+                    <p class="disclaimer">*Anggaran ini adalah berdasarkan formula susut nilai umum dan bukan nilai pasaran sebenar. Nilai sebenar mungkin berbeza.</p>
+                </div>
+            </main>
+        </div>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner" style="margin-top: 30px;">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        const depreciationRates = {
+            perodua: { year1: 0.19, subsequent: 0.05 },
+            toyota: { year1: 0.17, subsequent: 0.06 },
+            honda: { year1: 0.19, subsequent: 0.07 },
+            proton: { year1: 0.20, subsequent: 0.08 },
+            others: { year1: 0.22, year2: 0.15, year3_5: 0.12, after5: 0.08 }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('trade-in-form');
+            form.addEventListener('submit', function(e) { e.preventDefault(); calculateAndDisplay(); });
+            const shareBtn = document.getElementById('share-btn');
+            const shareDropdown = document.getElementById('share-dropdown');
+            shareBtn.addEventListener('click', () => shareDropdown.classList.toggle('show'));
+            window.addEventListener('click', (e) => { if (!shareBtn.contains(e.target) && !shareDropdown.contains(e.target)) { shareDropdown.classList.remove('show'); } });
+            document.getElementById('copy-link-btn').addEventListener('click', copyLink);
+            document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+            document.getElementById('pdf-btn').addEventListener('click', saveAsPdf);
+        });
+
+        function calculateAndDisplay() {
+            const originalPrice = parseFloat(document.getElementById('originalPrice').value) || 0;
+            const modelYear = parseInt(document.getElementById('modelYear').value) || 0;
+            const brand = document.getElementById('brand').value;
+            const currentYear = 2025;
+
+            if (originalPrice <= 0 || modelYear <= 1980 || modelYear > currentYear) {
+                alert("Sila masukkan harga dan tahun model yang sah."); return;
+            }
+
+            const carAge = currentYear - modelYear;
+            let currentValue = originalPrice;
+            const selectedRates = depreciationRates[brand];
+            
+            for (let year = 1; year <= carAge; year++) {
+                let rate;
+                if (brand === 'others') {
+                    if (year === 1) rate = selectedRates.year1;
+                    else if (year === 2) rate = selectedRates.year2;
+                    else if (year >= 3 && year <= 5) rate = selectedRates.year3_5;
+                    else rate = selectedRates.after5;
+                } else {
+                    rate = (year === 1) ? selectedRates.year1 : selectedRates.subsequent;
+                }
+                currentValue *= (1 - rate);
+            }
+
+            const totalDepreciation = originalPrice - currentValue;
+
+            document.getElementById('estimatedValue').textContent = `RM ${currentValue.toFixed(2)}`;
+            document.getElementById('displayOriginalPrice').textContent = `RM ${originalPrice.toFixed(2)}`;
+            document.getElementById('displayCarAge').textContent = `${carAge} Tahun`;
+            document.getElementById('displayTotalDepreciation').textContent = `RM ${totalDepreciation.toFixed(2)}`;
+        }
+
+        function takeScreenshot() { html2canvas(document.getElementById('capture-area')).then(canvas => { const link = document.createElement('a'); link.download = 'anggaran-nilai-trade-in.png'; link.href = canvas.toDataURL('image/png'); link.click(); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function saveAsPdf() { const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' }); html2canvas(document.getElementById('capture-area')).then(canvas => { const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth(); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight); doc.save('anggaran-nilai-trade-in.pdf'); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href).then(() => alert('Pautan telah disalin!')); document.getElementById('share-dropdown').classList.remove('show'); }
+    </script>
+</body>
+</html>

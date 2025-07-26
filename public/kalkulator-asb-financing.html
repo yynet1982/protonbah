@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Pembiayaan ASB (Islamic Financing) | Kira Ansuran Bulanan</title>
+    <meta name="description" content="Gunakan kalkulator pembiayaan ASB kami untuk mengira bayaran bulanan, jumlah keuntungan bank, dan melihat jadual pelunasan penuh (amortisasi) untuk pinjaman Islamik anda.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+wFjr8bCqwY2SA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #3A7CA5; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --border-radius: 12px; --border-color: #dee2e6; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .calculator-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .calculator-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .header-buttons { display: flex; gap: 10px; position: relative; }
+        .action-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .action-button:hover { background-color: #e9f3f8; border-color: var(--accent-color); }
+        .share-dropdown { display: none; position: absolute; top: 100%; right: 0; margin-top: 8px; background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); border: 1px solid var(--border-color); width: 220px; z-index: 10; overflow: hidden; }
+        .share-dropdown.show { display: block; }
+        .share-dropdown a, .share-dropdown button { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--font-color); text-decoration: none; font-size: 0.95rem; border: none; width: 100%; text-align: left; background: none; cursor: pointer; }
+        .share-dropdown a:hover, .share-dropdown button:hover { background-color: var(--secondary-color); }
+        .share-dropdown i { width: 20px; text-align: center; color: #555; }
+        .share-dropdown hr { border: none; border-top: 1px solid var(--border-color); margin: 5px 0; }
+        .clickable-banner { display: block; margin: 30px auto; max-width: 728px; border-radius: var(--border-radius); overflow: hidden; box-shadow: var(--card-shadow); }
+        .clickable-banner img { width: 100%; height: auto; display: block; }
+        .calculator-layout { display: grid; grid-template-columns: 1fr; gap: 30px; }
+        @media (min-width: 768px) { .calculator-layout { grid-template-columns: 1fr 1fr; } }
+        .card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 30px; box-shadow: var(--card-shadow); }
+        .card h2 { margin-top: 0; font-size: 1.5rem; color: var(--primary-color); border-bottom: 2px solid var(--secondary-color); padding-bottom: 10px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; }
+        .calculate-btn { width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--primary-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; }
+        .calculate-btn:hover { background-color: var(--accent-color); }
+        .result-display p { display: flex; justify-content: space-between; font-size: 1.1rem; margin: 15px 0; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .result-display span { font-weight: 600; }
+        .result-display .monthly-payment span { font-size: 1.8rem; color: var(--primary-color); }
+        .amortization-section { margin-top: 30px; }
+        .amortization-table-container { max-height: 400px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; }
+        .amortization-table { width: 100%; border-collapse: collapse; text-align: right; }
+        .amortization-table th, .amortization-table td { padding: 12px; border-bottom: 1px solid #eee; }
+        .amortization-table th { background-color: var(--secondary-color); position: sticky; top: 0; font-weight: 600; }
+        .amortization-table th:first-child, .amortization-table td:first-child { text-align: center; }
+        @media (max-width: 768px) {
+            .container { padding: 15px; }
+            .calculator-header h1 { font-size: 1.5rem; }
+            .card h2 { font-size: 1.2rem; }
+            .form-group label { font-size: 0.9rem; }
+            .form-group input, .form-group select { padding: 10px 12px; font-size: 0.95rem; }
+            .result-display p { font-size: 0.95rem; flex-direction: column; align-items: flex-start; gap: 4px; }
+            .result-display span { font-size: 1rem; }
+            .result-display .monthly-payment span { font-size: 1.5rem; }
+            .calculate-btn, .action-button { padding: 10px 15px; font-size: 0.9rem; }
+            .amortization-table th, .amortization-table td { padding: 8px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="calculator-header">
+            <h1>Kalkulator Pembiayaan ASB</h1>
+            <div class="header-buttons">
+                <a href="index.html" class="action-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+                <button id="share-btn" class="action-button"><i class="fa-solid fa-share-nodes"></i> Kongsi</button>
+                <div id="share-dropdown" class="share-dropdown">
+                    <button id="copy-link-btn"><i class="fa-solid fa-link"></i> Salin Pautan</button>
+                    <button id="screenshot-btn"><i class="fa-solid fa-camera"></i> Tangkapan Skrin</button>
+                    <button id="pdf-btn"><i class="fa-solid fa-file-pdf"></i> Simpan sebagai PDF</button>
+                    <hr>
+                    <a id="whatsapp-share" href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+                    <a id="facebook-share" href="#" target="_blank"><i class="fa-brands fa-facebook"></i> Facebook</a>
+                    <a id="twitter-share" href="#" target="_blank"><i class="fa-brands fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </header>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+        <div style="text-align: center; max-width: 700px; margin: 0 auto 30px auto; padding: 0 15px;">
+            <p>Rancang pelaburan anda dengan <strong>kalkulator pembiayaan ASB</strong> kami. Alatan ini membantu anda mengira <strong>ansuran bulanan</strong> untuk pembiayaan Islamik (Islamic Financing) dan melihat unjuran jadual pembayaran balik anda. Masukkan jumlah pembiayaan, kadar keuntungan, dan tempoh untuk memulakan perancangan anda.</p>
+        </div>
+        <div id="capture-area">
+            <main class="calculator-layout">
+                <div class="card">
+                    <h2>Maklumat Pembiayaan</h2>
+                    <form id="asb-form">
+                        <div class="form-group"><label for="loanAmount">Jumlah Pembiayaan (RM)</label><input type="number" id="loanAmount" value="50000" required></div>
+                        <div class="form-group"><label for="interestRate">Kadar Keuntungan Tahunan (%)</label><input type="number" id="interestRate" step="0.01" value="4.5" required></div>
+                        <div class="form-group"><label for="loanTenure">Tempoh Pembiayaan (Tahun)</label><input type="number" id="loanTenure" value="30" required></div>
+                        <button type="submit" class="calculate-btn">Kira</button>
+                    </form>
+                </div>
+                <div class="card" id="results-card">
+                    <h2>Ringkasan Hasil</h2>
+                    <div id="result" class="result-display">
+                        <p class="monthly-payment">Bayaran Bulanan: <span id="monthlyPayment">RM 0.00</span></p>
+                        <p>Jumlah Keuntungan Bank: <span id="totalInterest">RM 0.00</span></p>
+                        <p>Jumlah Bayaran: <span id="totalPayment">RM 0.00</span></p>
+                    </div>
+                </div>
+            </main>
+            <section class="amortization-section card" id="amortization-card" style="display: none;">
+                <h2>Jadual Pelunasan (Amortisasi)</h2>
+                <div class="amortization-table-container">
+                    <table class="amortization-table">
+                        <thead><tr><th>Bulan</th><th>Keuntungan Bank</th><th>Prinsipal</th><th>Baki Pembiayaan</th></tr></thead>
+                        <tbody id="amortization-body"></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+        <a href="https://wa.me/601171111239?text=Salam,%20saya%20berminat%20untuk%20mengetahui%20lebih%20lanjut%20tentang%20promosi%20Proton%20terkini." target="_blank" class="clickable-banner" style="margin-top: 30px;">
+            <img src="images/proton-banner.png" alt="Promosi Proton Sabah">
+        </a>
+    </div>
+    <script>
+        const { jsPDF } = window.jspdf;
+        document.addEventListener('DOMContentLoaded', function() {
+            const asbForm = document.getElementById('asb-form');
+            asbForm.addEventListener('submit', function(e) { e.preventDefault(); calculateAndDisplay(); });
+            const shareBtn = document.getElementById('share-btn');
+            const shareDropdown = document.getElementById('share-dropdown');
+            shareBtn.addEventListener('click', () => shareDropdown.classList.toggle('show'));
+            window.addEventListener('click', (e) => { if (!shareBtn.contains(e.target) && !shareDropdown.contains(e.target)) { shareDropdown.classList.remove('show'); } });
+            document.getElementById('copy-link-btn').addEventListener('click', copyLink);
+            document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+            document.getElementById('pdf-btn').addEventListener('click', saveAsPdf);
+            updateSocialShareLinks();
+        });
+        function calculateAndDisplay() {
+            const loanAmount = parseFloat(document.getElementById('loanAmount').value);
+            const interestRate = parseFloat(document.getElementById('interestRate').value);
+            const loanTenure = parseInt(document.getElementById('loanTenure').value);
+            if (isNaN(loanAmount) || isNaN(interestRate) || isNaN(loanTenure) || loanAmount <= 0 || interestRate <= 0 || loanTenure <= 0) { alert("Sila masukkan nilai yang sah untuk semua medan."); return; }
+            const monthlyInterestRate = interestRate / 100 / 12;
+            const numberOfMonths = loanTenure * 12;
+            const monthlyPayment = loanAmount * (monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfMonths)) / (Math.pow(1 + monthlyInterestRate, numberOfMonths) - 1);
+            const totalPayment = monthlyPayment * numberOfMonths;
+            const totalInterest = totalPayment - loanAmount;
+            document.getElementById('monthlyPayment').textContent = `RM ${monthlyPayment.toFixed(2)}`;
+            document.getElementById('totalInterest').textContent = `RM ${totalInterest.toFixed(2)}`;
+            document.getElementById('totalPayment').textContent = `RM ${totalPayment.toFixed(2)}`;
+            generateAmortization(loanAmount, monthlyPayment, monthlyInterestRate, numberOfMonths);
+        }
+        function generateAmortization(principal, monthlyPayment, monthlyInterestRate, numberOfMonths) {
+            const tableBody = document.getElementById('amortization-body');
+            tableBody.innerHTML = '';
+            let balance = principal;
+            for (let i = 1; i <= numberOfMonths; i++) {
+                const interestForMonth = balance * monthlyInterestRate;
+                const principalForMonth = monthlyPayment - interestForMonth;
+                balance -= principalForMonth;
+                if (balance < 0) { balance = 0; }
+                const row = `<tr><td>${i}</td><td>${interestForMonth.toFixed(2)}</td><td>${principalForMonth.toFixed(2)}</td><td>${balance.toFixed(2)}</td></tr>`;
+                tableBody.innerHTML += row;
+            }
+            document.getElementById('amortization-card').style.display = 'block';
+        }
+        function takeScreenshot() { html2canvas(document.getElementById('capture-area')).then(canvas => { const link = document.createElement('a'); link.download = 'ringkasan-pembiayaan-asb.png'; link.href = canvas.toDataURL('image/png'); link.click(); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function saveAsPdf() { const doc = new jsPDF({ orientation: 'p', unit: 'pt', format: 'a4' }); html2canvas(document.getElementById('capture-area')).then(canvas => { const imgData = canvas.toDataURL('image/png'); const imgProps = doc.getImageProperties(imgData); const pdfWidth = doc.internal.pageSize.getWidth(); const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width; doc.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight); doc.save('laporan-pembiayaan-asb.pdf'); }); document.getElementById('share-dropdown').classList.remove('show'); }
+        function copyLink() { navigator.clipboard.writeText(window.location.href).then(() => alert('Pautan telah disalin!')); document.getElementById('share-dropdown').classList.remove('show'); }
+        function updateSocialShareLinks() {
+            const pageUrl = encodeURIComponent(window.location.href);
+            const shareText = encodeURIComponent("Gunakan Kalkulator Pembiayaan ASB ini untuk merancang kewangan anda!");
+            document.getElementById('whatsapp-share').href = `https://api.whatsapp.com/send?text=${shareText} ${pageUrl}`;
+            document.getElementById('facebook-share').href = `https://www.facebook.com/sharer/sharer.php?u=${pageUrl}`;
+            document.getElementById('twitter-share').href = `https://twitter.com/intent/tweet?url=${pageUrl}&text=${shareText}`;
+        }
+    </script>
+</body>
+</html>

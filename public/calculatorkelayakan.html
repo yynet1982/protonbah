@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Pra-Kelulusan Pinjaman Kereta Proton</title>
+    <meta name="description" content="Semak kelayakan pinjaman kereta Proton anda dengan kalkulator pra-kelulusan kami. Dapatkan anggaran kelulusan segera untuk pendapatan tetap atau berubah.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" xintegrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        :root { --primary-color: #0A2342; --secondary-color: #f8f9fa; --accent-color: #D62828; --font-color: #212529; --card-bg: #ffffff; --card-shadow: 0 4px 15px rgba(0, 0, 0, 0.06); --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.1); --border-radius: 12px; --border-color: #dee2e6; --whatsapp-color: #25D366; --success-color: #28a745; --danger-color: #dc3545; --info-color: #6c757d; }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--secondary-color); color: var(--font-color); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 20px; }
+        .page-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--border-color); margin-bottom: 30px; }
+        .page-header h1 { font-size: 1.8rem; color: var(--primary-color); margin: 0; }
+        .back-button { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; background-color: var(--card-bg); border: 2px solid var(--border-color); border-radius: 50px; color: var(--primary-color); font-weight: 600; text-decoration: none; transition: all 0.3s ease; cursor: pointer; }
+        .card { background-color: var(--card-bg); border-radius: var(--border-radius); padding: 30px; box-shadow: var(--card-shadow); margin-bottom: 30px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 1rem; box-sizing: border-box; background-color: white; }
+        .form-group textarea::placeholder { color: #999; opacity: 1; }
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; }
+        .calculate-btn { width: 100%; padding: 15px; font-size: 1.1rem; font-weight: 600; color: white; background-color: var(--primary-color); border: none; border-radius: 8px; cursor: pointer; transition: background-color 0.3s ease; }
+        .income-type-selector { display: flex; gap: 10px; margin-bottom: 30px; }
+        .income-type-btn { flex: 1; padding: 15px; font-size: 1rem; font-weight: 600; border: 2px solid var(--border-color); background-color: var(--card-bg); color: var(--font-color); border-radius: 8px; cursor: pointer; transition: all 0.3s ease; }
+        .income-type-btn.active { background-color: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .form-section { display: none; }
+        .form-section.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .result-card { text-align: center; }
+        .result-status { padding: 20px; border-radius: var(--border-radius); color: white; font-size: 1.5rem; font-weight: 700; margin-bottom: 20px; }
+        .result-status.approved { background-color: var(--success-color); }
+        .result-status.rejected { background-color: var(--danger-color); }
+        .result-status.info { background-color: var(--info-color); }
+        .result-summary { margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid var(--border-color); text-align: left; }
+        .result-summary p { font-size: 1.1rem; margin: 8px 0; display: flex; justify-content: space-between; }
+        .result-summary span { font-weight: 700; color: var(--primary-color); }
+        .whatsapp-btn { display: inline-flex; align-items: center; gap: 10px; margin-top: 30px; padding: 15px 30px; background-color: var(--whatsapp-color); color: white; border-radius: 50px; text-decoration: none; font-weight: 600; font-size: 1.2rem; transition: all 0.3s ease; border: none; cursor: pointer; }
+        .whatsapp-btn:hover { transform: scale(1.05); background-color: #20b859; }
+        .tool-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 20px; text-align: left;}
+        .model-card { background-color: var(--card-bg); border-radius: var(--border-radius); box-shadow: var(--card-shadow); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .model-card:hover { transform: translateY(-8px); box-shadow: var(--card-hover-shadow); }
+        .model-card-image img { width: 100%; height: 180px; object-fit: cover; }
+        .model-card-content { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .model-card-content h3 { margin: 0; font-size: 1.4rem; color: var(--primary-color); }
+        .model-card-content .price-range { font-size: 1rem; font-weight: 600; color: var(--accent-color); margin: 5px 0 15px 0; }
+        .model-card-content .description { font-size: 0.9rem; color: #555; flex-grow: 1; }
+        .model-card-content .cta-button { display: block; margin-top: 20px; padding: 10px; background-color: var(--primary-color); color: white; text-align: center; border-radius: 8px; font-weight: 600; text-decoration: none; }
+        .model-card-content .cta-button:hover { background-color: var(--accent-color); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Kalkulator Pra-Kelulusan Pinjaman</h1>
+            <a href="index.html" class="back-button"><i class="fa-solid fa-arrow-left"></i> Kembali</a>
+        </header>
+
+        <div class="card">
+            <h2>Pilih Jenis Pendapatan Anda</h2>
+            <div class="income-type-selector">
+                <button id="btn-fixed" class="income-type-btn active">Gaji Tetap / Kerajaan</button>
+                <button id="btn-variable" class="income-type-btn">Gaji Berubah / Swasta</button>
+            </div>
+
+            <form id="fixed-income-form" class="form-section active">
+                <div class="form-grid">
+                    <div class="form-group"><label for="net-salary-1">Gaji Bersih 1 (RM)</label><input type="number" id="net-salary-1" required></div>
+                    <div class="form-group"><label for="net-salary-2">Gaji Bersih 2 (RM)</label><input type="number" id="net-salary-2" required></div>
+                    <div class="form-group"><label for="net-salary-3">Gaji Bersih 3 (RM)</label><input type="number" id="net-salary-3" required></div>
+                </div>
+                <div class="form-group"><label for="fixed-commitment">Komitmen Luar (RM)</label><input type="number" id="fixed-commitment" value="0" required></div>
+                <div class="form-group"><label for="fixed-blacklist">Status Blacklist/CTOS</label><select id="fixed-blacklist"><option value="tidak">Tidak Ada</option><option value="ada">Ada</option></select></div>
+                <div class="form-group"><label for="fixed-remark">Catatan (Pilihan)</label><textarea id="fixed-remark" rows="3" placeholder="Contoh: Kerja sebagai kerani, ada lesen memandu, sudah berkhidmat 2 tahun."></textarea></div>
+                <button type="submit" class="calculate-btn">Semak Kelayakan</button>
+            </form>
+
+            <form id="variable-income-form" class="form-section">
+                <div class="form-group"><label for="basic-salary">Gaji Pokok (RM)</label><input type="number" id="basic-salary" required></div>
+                <label>Pendapatan Tambahan (6 Bulan Terkini)</label>
+                <div class="form-grid">
+                    <div class="form-group"><input type="number" class="variable-income" placeholder="Bulan 1"></div>
+                    <div class="form-group"><input type="number" class="variable-income" placeholder="Bulan 2"></div>
+                    <div class="form-group"><input type="number" class="variable-income" placeholder="Bulan 3"></div>
+                    <div class="form-group"><input type="number" class="variable-income" placeholder="Bulan 4"></div>
+                    <div class="form-group"><input type="number" class="variable-income" placeholder="Bulan 5"></div>
+                    <div class="form-group"><input type="number" class="variable-income" placeholder="Bulan 6"></div>
+                </div>
+                <label>Jumlah Potongan (6 Bulan Terkini)</label>
+                <div class="form-grid">
+                    <div class="form-group"><input type="number" class="variable-deduction" placeholder="Bulan 1"></div>
+                    <div class="form-group"><input type="number" class="variable-deduction" placeholder="Bulan 2"></div>
+                    <div class="form-group"><input type="number" class="variable-deduction" placeholder="Bulan 3"></div>
+                    <div class="form-group"><input type="number" class="variable-deduction" placeholder="Bulan 4"></div>
+                    <div class="form-group"><input type="number" class="variable-deduction" placeholder="Bulan 5"></div>
+                    <div class="form-group"><input type="number" class="variable-deduction" placeholder="Bulan 6"></div>
+                </div>
+                <div class="form-group"><label for="variable-commitment">Komitmen Luar (RM)</label><input type="number" id="variable-commitment" value="0" required></div>
+                <div class="form-group"><label for="variable-blacklist">Status Blacklist/CTOS</label><select id="variable-blacklist"><option value="tidak">Tidak Ada</option><option value="ada">Ada</option></select></div>
+                <div class="form-group"><label for="variable-remark">Catatan (Pilihan)</label><textarea id="variable-remark" rows="3" placeholder="Contoh: Kerja sebagai kerani, ada lesen memandu, sudah berkhidmat 2 tahun."></textarea></div>
+                <button type="submit" class="calculate-btn">Semak Kelayakan</button>
+            </form>
+        </div>
+
+        <div id="result-container" class="card result-card" style="display: none;">
+        </div>
+    </div>
+
+    <script>
+        const carModels = [
+            { name: 'Proton Saga', installment: 450, image: 'images/models/saga.jpg', price: 'RM41,790 - RM47,890', description: 'JIMAT RM2,000. Pilihan ideal untuk pembeli kereta pertama, keluarga kecil, dan pemanduan bandar. Praktikal, jimat minyak, dan sangat mampu milik.', link: 'hire-purchase-calculator.html' },
+            { name: 'Proton Persona', installment: 550, image: 'images/models/persona.jpg', price: 'RM50,990 - RM61,688', description: 'JIMAT RM2,000 Untuk mereka yang perlukan ruang lebih besar dari Saga. Sesuai untuk keluarga yang sedang membesar dan golongan profesional muda.', link: 'hire-purchase-calculator.html' },
+            { name: 'Proton Iriz', installment: 500, image: 'images/models/Iriz.png', price: 'RM42,800 - RM57,300', description: 'Hatchback yang sporty dan lincah, sesuai untuk pemanduan di bandar dan mereka yang berjiwa muda.', link: 'hire-purchase-calculator.html' },
+            { name: 'Proton S70', installment: 800, image: 'images/models/s70.jpg', price: 'RM77,611 - RM99,026', description: 'JIMAT DARI RM4,000 - RM6,000. Sedan segmen-C yang penuh dengan teknologi terkini. Pilihan tepat untuk keluarga yang ingin menaik taraf dan eksekutif.', link: 'hire-purchase-calculator.html' },
+            { name: 'Proton X50', installment: 950, image: 'images/models/x50.jpg', price: 'RM97,263 - RM117,636', description: 'JIMAT RM10,000. SUV kompak yang bergaya dan berprestasi tinggi. Sesuai untuk mereka yang gemarkan teknologi, pemanduan dinamik, dan keluarga urban.', link: 'hire-purchase-calculator.html' },
+            { name: 'Proton X70', installment: 1100, image: 'images/models/x70.jpg', price: 'RM102,875 - RM131,397', description: 'JIMAT RM10,000. Menawarkan keselesaan dan ciri-ciri premium. Pilihan terbaik untuk keluarga yang inginkan SUV yang luas dan selesa untuk perjalanan jauh.', link: 'hire-purchase-calculator.html' },
+            { name: 'Proton X90', installment: 1350, image: 'images/models/x90.jpg', price: 'RM128,340 - RM157,882', description: 'JIMAT RM10,000. SUV 6/7 tempat duduk yang paling luas dan mewah dari Proton. Sempurna untuk keluarga besar yang memerlukan ruang dan keselesaan maksimum.', link: 'hire-purchase-calculator.html' }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnFixed = document.getElementById('btn-fixed');
+            const btnVariable = document.getElementById('btn-variable');
+            const fixedForm = document.getElementById('fixed-income-form');
+            const variableForm = document.getElementById('variable-income-form');
+            const resultContainer = document.getElementById('result-container');
+
+            btnFixed.addEventListener('click', () => {
+                btnFixed.classList.add('active');
+                btnVariable.classList.remove('active');
+                fixedForm.classList.add('active');
+                variableForm.classList.remove('active');
+            });
+
+            btnVariable.addEventListener('click', () => {
+                btnVariable.classList.add('active');
+                btnFixed.classList.remove('active');
+                variableForm.classList.add('active');
+                fixedForm.classList.remove('active');
+            });
+
+            fixedForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                calculateFixed();
+            });
+
+            variableForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                calculateVariable();
+            });
+            
+            function calculateLoanAbility(netIncome, commitment) {
+                // Rule A: DSR (Debt Service Ratio) Method
+                const maxInstallmentDSR = (netIncome * 0.70) - commitment;
+                // Rule B: NDI (Net Disposable Income) Method
+                const maxInstallmentNDI = netIncome - commitment - 800;
+                // The final eligible installment is the LOWER of the two values.
+                const loanAbility = Math.min(maxInstallmentDSR, maxInstallmentNDI);
+                return loanAbility;
+            }
+
+            function calculateFixed() {
+                const salaries = [
+                    parseFloat(document.getElementById('net-salary-1').value) || 0,
+                    parseFloat(document.getElementById('net-salary-2').value) || 0,
+                    parseFloat(document.getElementById('net-salary-3').value) || 0
+                ];
+                const commitment = parseFloat(document.getElementById('fixed-commitment').value) || 0;
+                const blacklist = document.getElementById('fixed-blacklist').value;
+                const remark = document.getElementById('fixed-remark').value;
+                const averageSalary = salaries.reduce((a, b) => a + b, 0) / salaries.length;
+                const loanAbility = calculateLoanAbility(averageSalary, commitment);
+                const formData = { type: 'Gaji Tetap', netIncome: averageSalary, komitmen: commitment, blacklist: blacklist, remark: remark, kelayakan: loanAbility };
+                displayResult(loanAbility, averageSalary, formData);
+            }
+
+            function calculateVariable() {
+                const basic = parseFloat(document.getElementById('basic-salary').value) || 0;
+                const incomes = Array.from(document.querySelectorAll('.variable-income')).map(el => parseFloat(el.value) || 0);
+                const deductions = Array.from(document.querySelectorAll('.variable-deduction')).map(el => parseFloat(el.value) || 0);
+                const commitment = parseFloat(document.getElementById('variable-commitment').value) || 0;
+                const blacklist = document.getElementById('variable-blacklist').value;
+                const remark = document.getElementById('variable-remark').value;
+                const avgIncome = incomes.reduce((a, b) => a + b, 0) / incomes.length;
+                const avgDeduction = deductions.reduce((a, b) => a + b, 0) / deductions.length;
+                const estimatedNetIncome = basic + (avgIncome * 0.70) - avgDeduction;
+                const loanAbility = calculateLoanAbility(estimatedNetIncome, commitment);
+                const formData = { type: 'Gaji Berubah', netIncome: estimatedNetIncome, komitmen: commitment, blacklist: blacklist, remark: remark, kelayakan: loanAbility };
+                displayResult(loanAbility, estimatedNetIncome, formData);
+            }
+
+            function displayResult(loanAbility, netIncome, formData) {
+                resultContainer.style.display = 'block';
+                const suitableCars = carModels.filter(car => car.installment <= loanAbility).sort((a, b) => b.installment - a.installment);
+                
+                let resultHTML = `<h2>Hasil Pengiraan Kelayakan</h2>`;
+                resultHTML += `<div class="result-summary">
+                                  <p>Anggaran Pendapatan Bersih: <span>RM ${netIncome.toFixed(2)}</span></p>
+                                  <p>Anggaran Ansuran Layak: <span>RM ${loanAbility > 0 ? loanAbility.toFixed(2) : '0.00'}</span></p>
+                               </div>`;
+                
+                if (loanAbility > 0 && formData.blacklist === 'tidak') {
+                    if (suitableCars.length > 0) {
+                        resultHTML += `<div class="result-status approved"><i class="fa-solid fa-check-circle"></i> TAHNIAH! ANDA LAYAK</div>`;
+                        resultHTML += `<h3>Model Proton yang Sesuai Dengan Bajet Anda:</h3><div class="tool-grid">`;
+                        suitableCars.forEach(car => {
+                             resultHTML += `
+                                <div class="model-card">
+                                    <div class="model-card-image"><img src="${car.image}" alt="${car.name}" onerror="this.onerror=null;this.src='https://placehold.co/600x400/eeeeee/cccccc?text=${car.name}';"></div>
+                                    <div class="model-card-content">
+                                        <h3>${car.name}</h3><p class="price-range">${car.price}</p><p class="description">${car.description}</p>
+                                        <a href="${car.link}" class="cta-button">Kira Ansuran</a>
+                                    </div>
+                                </div>`;
+                        });
+                        resultHTML += `</div>`;
+                    } else {
+                        resultHTML += `<div class="result-status info"><i class="fa-solid fa-info-circle"></i> Maaf, anda tidak layak</div>`;
+                        resultHTML += `<p style="margin-top: 20px;">Anggaran ansuran bulanan anda terlalu rendah untuk model Proton yang ada sekarang. Sila hubungi saya untuk perbincangan lanjut atau bantuan khas.</p>`;
+                    }
+                } else {
+                    resultHTML += `<div class="result-status rejected"><i class="fa-solid fa-times-circle"></i> MAAF, TIDAK LAYAK</div>
+                                  <p>Berdasarkan pengiraan, pendapatan anda mungkin tidak mencukupi atau terdapat isu blacklist/CTOS. Sila hubungi kami untuk khidmat nasihat lanjut.</p>`;
+                }
+
+                resultHTML += `<button id="submit-whatsapp" class="whatsapp-btn"><i class="fa-brands fa-whatsapp"></i> Hantar Permohonan</button>`;
+                resultContainer.innerHTML = resultHTML;
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+                
+                document.getElementById('submit-whatsapp').addEventListener('click', (e) => {
+                    e.preventDefault();
+                    sendWhatsApp(formData);
+                });
+            }
+
+            function sendWhatsApp(data) {
+                let message = `Salam, saya telah menggunakan Kalkulator Kelayakan Pinjaman dan ingin menghantar butiran saya untuk semakan pra-kelulusan.\n\n`;
+                message += `*RINGKASAN PERMOHONAN*\n\n`;
+                message += `*Jenis Pendapatan:* ${data.type}\n`;
+                message += `*Anggaran Pendapatan Bersih:* RM ${data.netIncome.toFixed(2)}\n`;
+                message += `*Komitmen Luar:* RM ${data.komitmen.toFixed(2)}\n`;
+                message += `*Status Blacklist/CTOS:* ${data.blacklist}\n`;
+                message += `*Catatan:* ${data.remark || '-'}\n\n`;
+                message += `*ANGGARAN KELAYAKAN ANSURAN: RM ${data.kelayakan > 0 ? data.kelayakan.toFixed(2) : '0.00'}*`;
+
+                const whatsappURL = `https://wa.me/601171111239?text=${encodeURIComponent(message)}`;
+                window.open(whatsappURL, '_blank');
+            }
+        });
+    </script>
+</body>
+</html>
